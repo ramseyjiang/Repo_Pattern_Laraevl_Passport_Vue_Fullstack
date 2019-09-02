@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Pacific/Auckland',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,11 +169,12 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Rspafs\Providers\AppServiceProvider::class,
+        Rspafs\Providers\AuthServiceProvider::class,
+        // Rspafs\Providers\BroadcastServiceProvider::class,
+        Rspafs\Providers\EventServiceProvider::class,
+        Rspafs\Providers\TelescopeServiceProvider::class,
+        Rspafs\Providers\RouteServiceProvider::class,
 
     ],
 
