@@ -2,11 +2,10 @@
 
 namespace Rspafs\Http\Controllers\Auth;
 
-use Rspafs\User;
 use Rspafs\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Rspafs\Http\Requests\UserRegisterRequest;
+use Rspafs\Contracts\Repositories\UserRepositoryContract;
 
 class RegisterController extends Controller
 {
@@ -35,38 +34,18 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryContract $user)
     {
         $this->middleware('guest');
+        $this->user = $user;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function register(UserRegisterRequest $request)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+        $user = $this->user->createUser($request->all());
+        $this->guard()->login($user);
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \Rspafs\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 }

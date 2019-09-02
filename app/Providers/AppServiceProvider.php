@@ -3,6 +3,10 @@
 namespace Rspafs\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Rspafs\Contracts\Repositories\UserRepositoryContract;
+use Rspafs\Contracts\Services\UserServiceContract;
+use Rspafs\Repositories\UserRepository;
+use Rspafs\Services\UserService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(UserRepositoryContract::class, UserRepository::class);
+        $this->app->bind(UserServiceContract::class, UserService::class);
     }
 
     /**

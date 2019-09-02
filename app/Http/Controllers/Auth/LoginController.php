@@ -4,6 +4,8 @@ namespace Rspafs\Http\Controllers\Auth;
 
 use Rspafs\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Rspafs\Http\Requests\UserLoginRequest;
+use Rspafs\Contracts\Services\UserServiceContract;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,23 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Rewrite login function in AuthenticatesUsers class for username or password login.
+     *
+     * @param UserLoginRequest $request
+     * @param UserServiceContract $userService
+     * @return void
+     */
+    public function login(UserLoginRequest $request, UserServiceContract $userService)
+    {
+        $userService->checkLogin($request->username, $request->password);
+        
+        if ($request->user()) {
+            return $this->sendLoginResponse($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
     }
 }
