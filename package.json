@@ -1,25 +1,74 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch": "npm run development -- --watch",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-    },
-    "devDependencies": {
-        "axios": "^0.18",
-        "bootstrap": "^4.1.0",
-        "cross-env": "^5.1",
-        "jquery": "^3.2",
-        "laravel-mix": "^4.0.7",
-        "lodash": "^4.17.5",
-        "popper.js": "^1.12",
-        "resolve-url-loader": "^2.3.1",
-        "sass": "^1.15.2",
-        "sass-loader": "^7.1.0",
-        "vue": "^2.5.17"
-    }
+	"private": true,
+	"scripts": {
+		"dev": "npm run development",
+		"development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"watch": "npm run development -- --watch",
+		"watch-poll": "npm run watch -- --watch-poll",
+		"hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"prod": "npm run production",
+		"production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"watchtest": "./node_modules/.bin/jest --coverage --watch",
+		"lint": "eslint --ext .js,.vue resources/js/components resources/js/tests",
+		"test": "./node_modules/.bin/jest",
+		"format": "prettier --write \"resources/**/*.js\" \"resources/**/*.vue\" \"*.js\" \"*.json\""
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.5.5",
+		"@babel/preset-env": "^7.5.5",
+		"@vue/cli-plugin-eslint": "^3.11.0",
+		"@vue/test-utils": "^1.0.0-beta.29",
+		"axios": "^0.18",
+		"axios-mock-adapter": "^1.17.0",
+		"babel-core": "^7.0.0-bridge.0",
+		"bootstrap": "^4.1.0",
+		"bootstrap-vue": "^2.0.0-rc.28",
+		"cross-env": "^5.1",
+		"eslint": "^5.16.0",
+		"eslint-config-prettier": "^6.1.0",
+		"eslint-plugin-prettier": "^3.1.0",
+		"eslint-plugin-vue": "^5.2.3",
+		"husky": "^3.0.5",
+		"jest": "^24.9.0",
+		"jquery": "^3.2",
+		"laravel-mix": "^4.0.7",
+		"lint-staged": "^9.2.5",
+		"lodash": "^4.17.5",
+		"popper.js": "^1.12",
+		"prettier": "^1.18.2",
+		"resolve-url-loader": "^2.3.1",
+		"sass": "^1.15.2",
+		"sass-loader": "^7.1.0",
+		"vue": "^2.5.17",
+		"vue-jest": "^3.0.4",
+		"vue-router": "^3.1.3",
+		"vue-template-compiler": "^2.6.10"
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"js",
+			"json",
+			"vue"
+		],
+		"modulePaths": [
+			"<rootDir>/resources/js/tests/*.test.js"
+		],
+		"transform": {
+			".*\\.(vue)$": "vue-jest",
+			"^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+		}
+	},
+	"lint-staged": {
+		"resources/**/*.{js,json,css,vue}": [
+			"prettier --write",
+			"eslint --fix",
+			"git add"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run format & npm test",
+			"pre-push": "npm test"
+		}
+	}
 }

@@ -3,23 +3,29 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+//import style
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-require('./bootstrap');
+//import js and vue components
+import './bootstrap';
+import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue';
+import VueRouter from 'vue-router';
+import router from './routes';
+import Index from './Index';
 
-window.Vue = require('vue');
+//Set site url globally
+window.baseUrl = `${process.env.MIX_APP_URL}`;
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+// Set Vue globally
+window.Vue = Vue;
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+Vue.use(VueRouter);
+Vue.use(BootstrapVue);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//load Index
+Vue.component('Index', Index);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28,5 +34,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app',
+	el: '#app',
+	router,
 });
