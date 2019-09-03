@@ -28,7 +28,8 @@ class AuthTest extends TestCase
         $response = $this->call('POST', route('register'), $data);
 
         //Assert it was successful
-        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertStatus(Response::HTTP_CREATED)
+                 ->assertJsonStructure([ 'access_token', 'token_type']);
 
         $this->assertDatabaseHas('users', [
             'email'  => $data['email'],
@@ -44,12 +45,13 @@ class AuthTest extends TestCase
     public function testEmailLogin()
     {   
         $response = $this->call('POST', route('login'),[
-            'email'    => 'test@qq.com',
+            'username'    => 'test@qq.com',
             'password' => '12345678',
         ]);
         
         //After login the page will be redirect.
-        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertStatus(Response::HTTP_OK)
+                 ->assertJsonStructure([ 'access_token', 'token_type']);
     }
 
     /**
@@ -65,7 +67,8 @@ class AuthTest extends TestCase
         ]);
 
         //After login the page will be redirect.
-        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertStatus(Response::HTTP_OK)
+                 ->assertJsonStructure([ 'access_token', 'token_type']);
     }
 
     public function testEmailLoginFail()
@@ -74,7 +77,10 @@ class AuthTest extends TestCase
             'username'    => 'test@email.com',
             'password' => 'notlegitpassword'
         ]);
-        $response->assertStatus(Response::HTTP_FOUND);
+
+        $response->assertJsonStructure([
+            'errors',
+        ]);
     }
 
     public function testUsernameLoginFail()
@@ -83,6 +89,9 @@ class AuthTest extends TestCase
             'username'    => 'test',
             'password' => 'notlegitpassword'
         ]);
-        $response->assertStatus(Response::HTTP_FOUND);
+
+        $response->assertJsonStructure([
+            'errors',
+        ]);
     }
 }

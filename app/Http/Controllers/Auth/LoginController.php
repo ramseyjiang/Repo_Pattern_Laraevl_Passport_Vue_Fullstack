@@ -6,6 +6,7 @@ use Rspafs\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Rspafs\Http\Requests\UserLoginRequest;
 use Rspafs\Contracts\Services\UserServiceContract;
+use Illuminate\Http\Response;
 
 class LoginController extends Controller
 {
@@ -50,10 +51,15 @@ class LoginController extends Controller
     {
         $userService->checkLogin($request->username, $request->password);
         
-        if ($request->user()) {
-            return $this->sendLoginResponse($request);
+        if ($user = $request->user()) {
+            return response()->json([
+                'access_token' => $user->createToken('Personal Access Token')->accessToken,
+                'token_type' => 'bearer'
+            ]);
+        } else {
+            return response()->json([
+                'errors' => trans('auth.failed')
+            ], Response::HTTP_UNAUTHORIZED);
         }
-
-        return $this->sendFailedLoginResponse($request);
     }
 }

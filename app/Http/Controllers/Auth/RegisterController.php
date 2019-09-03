@@ -6,6 +6,7 @@ use Rspafs\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Rspafs\Http\Requests\UserRegisterRequest;
 use Rspafs\Contracts\Repositories\UserRepositoryContract;
+use Illuminate\Http\Response;
 
 class RegisterController extends Controller
 {
@@ -43,9 +44,10 @@ class RegisterController extends Controller
     public function register(UserRegisterRequest $request)
     {
         $user = $this->user->createUser($request->all());
-        $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+        return response()->json([
+            'access_token' => $user->createToken('Personal Access Token')->accessToken,
+            'token_type' => 'bearer'
+        ], Response::HTTP_CREATED);
     }
 }

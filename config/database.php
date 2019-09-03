@@ -91,6 +91,15 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_HOST', '127.0.0.1'),
+            'port'     => env('MONGO_PORT'),
+            'database' => env('MONGO_DATABASE'),
+            'username' => env('MONGO_USERNAME'),
+            'password' => env('MONGO_PASSWORD'),
+        ],
+
     ],
 
     /*

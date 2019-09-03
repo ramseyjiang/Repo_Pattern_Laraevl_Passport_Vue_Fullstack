@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Jenssegers\Mongodb\Eloquent\HybridRelations;
 
 class User extends Authenticatable
 {
@@ -46,5 +47,24 @@ class User extends Authenticatable
 
     public function setNameAttribute($value) {
         $this->attributes['name'] = ucfirst($value);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs()
+    {
+        return $this->hasMany(Log::class)
+            ->orderBy('created_at');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class)
+        ->orderBy('released_at')
+        ->orderByDesc('created_at');
     }
 }
