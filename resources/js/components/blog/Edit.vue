@@ -14,9 +14,15 @@
 			</b-form-input>
 		</b-col>
 		<b-form-row>
-			<b-col sm="2" v-show="blogId !== undefined"> &nbsp; &nbsp; Creater: {{ blogs.createrName }} </b-col>
-			<b-col sm="3" v-show="blogId !== undefined"> Create time: {{ blogs.created_at }} </b-col>
-			<b-col sm="3" v-show="blogId !== undefined"> Update time: {{ blogs.updated_at }} </b-col>
+			<b-col sm="2" v-show="blogId !== undefined">
+				&nbsp; &nbsp; Creater: {{ blogs.createrName }}
+			</b-col>
+			<b-col sm="3" v-show="blogId !== undefined">
+				Create time: {{ blogs.created_at }}
+			</b-col>
+			<b-col sm="3" v-show="blogId !== undefined">
+				Update time: {{ blogs.updated_at }}
+			</b-col>
 		</b-form-row>
 		<b-col sm="12">
 			<label>Blog content</label>
