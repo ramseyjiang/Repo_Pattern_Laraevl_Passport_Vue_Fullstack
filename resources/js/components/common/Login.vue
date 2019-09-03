@@ -117,7 +117,7 @@ export default {
 				.post(baseUrl + '/login', this.form)
 				.then(res => {
 					localStorage.access_token = res.data.access_token;
-					location.href = 'dashboard'; //this.$router.push('dashboard');
+					location.href = '/blogs'; //this.$router.push('dashboard');
 				})
 				.catch(err => {
 					if (err.response.data.errors.username) {

@@ -12,7 +12,7 @@ import './bootstrap';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import VueRouter from 'vue-router';
-import router from './routes';
+import routes from './routes';
 import Index from './Index';
 
 //Set site url globally
@@ -27,6 +27,14 @@ Vue.use(BootstrapVue);
 //load Index
 Vue.component('Index', Index);
 
+const router = new VueRouter({
+	// base: 'figtest/public/index.php/',	//if deploy it on AWS, this line should config the same with your cloud path.
+	history: true,
+	mode: 'history',
+	fallback: true,
+	routes: routes,
+});
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -35,5 +43,5 @@ Vue.component('Index', Index);
 
 const app = new Vue({
 	el: '#app',
-	router,
+	router: router,
 });

@@ -160,7 +160,7 @@ export default {
 				.post('/register', this.form)
 				.then(res => {
 					localStorage.access_token = res.data.access_token;
-					location.href = '/dashboard';
+					location.href = '/blogs';
 				})
 				.catch(err => {
 					if (err.response.data.errors.email) {
