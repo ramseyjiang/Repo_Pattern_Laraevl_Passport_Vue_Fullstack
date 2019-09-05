@@ -16,9 +16,6 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-    <script>
-        let user = <?= empty(Auth::user()) ? 0 : Auth::user() ?>;
-    </script>
 </head>
 <body>
     <div id="app">

@@ -78,8 +78,7 @@ export default {
 	mounted() {
 		this.blogId = this.$route.query.blogId;
 		this.edit =
-			this.$route.path == '/editBlog' ||
-			this.$route.path == '/createBlog';
+			this.$route.path == '/editBlog' || this.$route.path == '/addBlog';
 		if (this.blogId !== undefined) {
 			this.getBlog();
 		}
@@ -87,7 +86,7 @@ export default {
 	methods: {
 		getBlog() {
 			axios
-				.get(baseUrl + '/blogs/show/' + this.blogId)
+				.get(baseUrl + '/api/blogs/show/' + this.blogId)
 				.then(response => {
 					this.blogs = response.data;
 					this.form.name = this.blogs.name;
@@ -104,7 +103,7 @@ export default {
 			};
 
 			axios
-				.post(baseUrl + '/blogs/store', data)
+				.post(baseUrl + '/api/blogs/store', data)
 				.then(response => {
 					this.blogs = response.data;
 					this.$router.push('blogs');
@@ -123,7 +122,7 @@ export default {
 			};
 
 			axios
-				.put(baseUrl + '/blogs/update/' + this.blogId, data)
+				.put(baseUrl + '/api/blogs/update/' + this.blogId, data)
 				.then(response => {
 					this.blogs = response.data;
 					this.$router.push('blogs');

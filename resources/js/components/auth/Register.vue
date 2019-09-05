@@ -116,6 +116,7 @@
 								<div class="col-md-6 offset-md-4">
 									<button
 										@click="register"
+										type="button"
 										class="btn btn-primary"
 									>
 										Register
@@ -134,6 +135,7 @@
 export default {
 	data() {
 		return {
+			isLogin: false,
 			form: {
 				name: '',
 				username: '',
@@ -155,36 +157,67 @@ export default {
 		};
 	},
 	methods: {
+		clearWarn() {
+			this.invalids.username = false;
+			this.invalids.password = false;
+			this.invalids.email = false;
+			this.invalids.name = false;
+		},
 		register() {
-			axios
-				.post('/register', this.form)
-				.then(res => {
-					localStorage.access_token = res.data.access_token;
-					location.href = '/blogs';
-				})
-				.catch(err => {
-					if (err.response.data.errors.email) {
-						this.errors.email = err.response.data.errors.email[0];
-						this.invalids.email = true;
-					}
+			if (
+				this.form.username.length &&
+				this.form.email.length &&
+				this.form.name.length &&
+				this.form.password.length
+			) {
+				this.clearWarn();
+				axios
+					.post('/api/register', this.form)
+					.then(res => {
+						localStorage.setItem(
+							'user',
+							JSON.stringify(res.data.user),
+						);
 
-					if (err.response.data.errors.name) {
-						this.errors.name = err.response.data.errors.name[0];
-						this.invalids.name = true;
-					}
+						localStorage.setItem(
+							'access_token',
+							res.data.access_token,
+						);
 
-					if (err.response.data.errors.username) {
-						this.errors.username =
-							err.response.data.errors.username[0];
-						this.invalids.username = true;
-					}
+						//Set axios request headers for api axios requests
+						axios.defaults.headers.common['Authorization'] =
+							`Bearer ` + res.data.access_token;
 
-					if (err.response.data.errors.password) {
-						this.errors.password =
-							err.response.data.errors.password[0];
-						this.invalids.password = true;
-					}
-				});
+						this.$bus.$emit('login', {
+							isLogin: true,
+						});
+						this.$router.push('/blogs');
+					})
+					.catch(err => {
+						if (err.response.data.errors.email) {
+							this.errors.email =
+								err.response.data.errors.email[0];
+							this.invalids.email = true;
+						}
+
+						if (err.response.data.errors.name) {
+							this.errors.name = err.response.data.errors.name[0];
+							this.invalids.name = true;
+						}
+
+						if (err.response.data.errors.username) {
+							this.errors.username =
+								err.response.data.errors.username[0];
+							this.invalids.username = true;
+						}
+
+						if (err.response.data.errors.password) {
+							this.errors.password =
+								err.response.data.errors.password[0];
+							this.invalids.password = true;
+						}
+					});
+			}
 		},
 	},
 };

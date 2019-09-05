@@ -18,12 +18,12 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<!-- Right Side Of Navbar -->
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item" v-show="userId == 0">
+					<li class="nav-item" v-if="!isLoggedIn">
 						<router-link class="nav-link" :to="{ name: 'login' }">
 							Login
 						</router-link>
 					</li>
-					<li class="nav-item" v-show="userId == 0">
+					<li class="nav-item" v-if="!isLoggedIn">
 						<router-link
 							class="nav-link"
 							:to="{ name: 'register' }"
@@ -31,7 +31,7 @@
 							Register
 						</router-link>
 					</li>
-					<li class="nav-item dropdown" v-show="userId">
+					<li class="nav-item dropdown" v-if="isLoggedIn">
 						<a
 							id="navbarDropdown"
 							class="nav-link dropdown-toggle"
@@ -62,22 +62,44 @@
 export default {
 	data() {
 		return {
+			isLogin: false,
 			userId: 0,
 			userName: '',
 		};
 	},
-	created() {
-		if (user) {
-			this.userId = user.id;
-			this.userName = user.name;
-		}
+	mounted() {
+		//It is used to display user login status after refresh.
+		this.getUserInfo();
+
+		//The bus is used to trigger the isLoggedIn() after a user login or register.
+		this.$bus.$on('login', ({ isLogin }) => {
+			this.getUserInfo();
+			this.isLogin = isLogin;
+		});
+	},
+	computed: {
+		//It is used to check login display on the nav or the guest display on the nav
+		isLoggedIn() {
+			return this.userId;
+		},
 	},
 	methods: {
+		getUserInfo() {
+			var user = JSON.parse(localStorage.getItem('user'));
+			this.userId = user !== null ? user.id : 0;
+			this.userName = user !== null ? user.name : null;
+		},
 		logout() {
-			axios.post(baseUrl + '/logout').then(res => {
+			axios.get(baseUrl + '/api/logout').then(res => {
+				localStorage.removeItem('user');
 				localStorage.removeItem('access_token');
-				// If use this.$router.push('/'); it needs to use transfer data between components.
-				location.href = '/';
+				this.getUserInfo();
+
+				//It is used to control some buttons not display after logout.
+				this.$bus.$emit('login', {
+					isLogin: false,
+				});
+				this.$router.push('/');
 			});
 		},
 	},

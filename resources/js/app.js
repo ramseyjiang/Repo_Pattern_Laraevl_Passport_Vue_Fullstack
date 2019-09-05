@@ -21,6 +21,20 @@ window.baseUrl = `${process.env.MIX_APP_URL}`;
 // Set Vue globally
 window.Vue = Vue;
 
+//define a global EventBus
+const EventBus = new Vue();
+Object.defineProperties(Vue.prototype, {
+	$bus: {
+		get: function() {
+			return EventBus;
+		},
+	},
+});
+
+//Set axios request headers for api axios requests
+axios.defaults.headers.common['Authorization'] =
+	`Bearer ` + localStorage.getItem('access_token');
+
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 

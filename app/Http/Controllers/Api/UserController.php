@@ -34,15 +34,20 @@ class UserController extends Controller
     public function login(UserLoginRequest $request, UserServiceContract $userService)
     {
         $userService->checkLogin($request->username, $request->password);
-        
+
         if ($user = $request->user()) {
             return response()->json([
                 'access_token' => $user->createToken('Personal Access Token')->accessToken,
-                'token_type' => 'bearer'
+                'token_type' => 'bearer',
+                'user' => $user
             ]);
         } else {
             return response()->json([
-                'errors' => trans('auth.failed')
+                'errors' => [
+                    'username' => [
+                        trans('auth.failed')
+                    ]
+                ]
             ], Response::HTTP_UNAUTHORIZED);
         }
     }
@@ -56,10 +61,11 @@ class UserController extends Controller
     public function register(UserRegisterRequest $request)
     {
         $user = $this->user->createUser($request->all());
-        
+
         return response()->json([
             'access_token' => $user->createToken('Personal Access Token')->accessToken,
-            'token_type' => 'bearer'
+            'token_type' => 'bearer',
+            'user' => $user
         ], Response::HTTP_CREATED);
     }
 

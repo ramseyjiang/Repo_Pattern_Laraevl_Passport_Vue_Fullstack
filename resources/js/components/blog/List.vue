@@ -4,7 +4,7 @@
 		<b-row>
 			<b-col lg="12" class="my-1">
 				<b-button
-					v-if="userId"
+					v-if="isLoggedIn"
 					@click="createBlog()"
 					variant="primary"
 					plain
@@ -137,7 +137,7 @@
 					@click="editBlog(row.item._id)"
 					class="mr-1"
 					variant="warning"
-					v-if="userId == 1 || userId == row.item.user_id"
+					v-if="isLoggedIn == 1 || isLoggedIn == row.item.user_id"
 				>
 					Edit
 				</b-button>
@@ -147,7 +147,7 @@
 					@click="deleteBlog(row.item._id)"
 					class="mr-1"
 					variant="danger"
-					v-if="userId == 1 || userId == row.item.user_id"
+					v-if="isLoggedIn == 1 || isLoggedIn == row.item.user_id"
 				>
 					Delete
 				</b-button>
@@ -195,8 +195,11 @@ export default {
 		};
 	},
 	mounted() {
-		this.userId = user.id;
 		this.getBlogs();
+
+		this.$bus.$on('login', ({ isLogin }) => {
+			this.checkUserId();
+		});
 	},
 	computed: {
 		sortOptions() {
@@ -207,11 +210,19 @@ export default {
 					return { text: f.label, value: f.key };
 				});
 		},
+		isLoggedIn() {
+			this.checkUserId();
+			return this.userId;
+		},
 	},
 	methods: {
+		checkUserId() {
+			let user = JSON.parse(localStorage.getItem('user'));
+			this.userId = user !== null ? user.id : 0;
+		},
 		getBlogs() {
 			axios
-				.get(baseUrl + '/blogs/index')
+				.get(baseUrl + '/api/blogs/index')
 				.then(response => {
 					this.blogs = response.data;
 					this.totalRows = this.blogs.length; // Set the initial number of blogs
@@ -222,7 +233,7 @@ export default {
 		},
 		deleteBlog(id) {
 			axios
-				.delete(baseUrl + '/blogs/delete/' + id)
+				.delete(baseUrl + '/api/blogs/delete/' + id)
 				.then(response => {
 					this.blogs = response.data;
 					this.totalRows = this.blogs.length;
@@ -237,7 +248,7 @@ export default {
 			this.currentPage = 1;
 		},
 		createBlog() {
-			this.$router.push('createBlog');
+			this.$router.push('addBlog');
 		},
 		editBlog(blogId) {
 			this.$router.push({ path: '/editBlog', query: { blogId: blogId } });

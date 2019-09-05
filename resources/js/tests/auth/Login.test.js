@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 
-import Component from '../components/common/Login.vue';
+import Component from '../../components/auth/Login.vue';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -95,7 +95,7 @@ describe('Test Login.vue.', () => {
 			},
 		});
 
-		mock.onPost('/login', wrapper.vm.form).reply(200, {
+		mock.onPost('/api/login', wrapper.vm.form).reply(200, {
 			status: 200,
 		});
 	});
@@ -103,7 +103,7 @@ describe('Test Login.vue.', () => {
 	let login = function() {
 		// console.log(wrapper.vm.form.username, wrapper.vm.form.password);
 		axios
-			.post('/login', wrapper.vm.form)
+			.post('/api/login', wrapper.vm.form)
 			.then(res => {
 				expect(res.status).toBe(200);
 			})

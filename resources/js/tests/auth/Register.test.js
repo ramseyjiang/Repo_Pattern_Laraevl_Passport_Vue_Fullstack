@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 
-import Component from '../components/common/Register.vue';
+import Component from '../../components/auth/Register.vue';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -117,14 +117,14 @@ describe('Test Register.vue.', () => {
 			},
 		});
 
-		mock.onPost('/register', wrapper.vm.form).reply(200, {
+		mock.onPost('/api/register', wrapper.vm.form).reply(200, {
 			status: 200,
 		});
 	});
 
 	let register = function() {
 		axios
-			.post('/register', wrapper.vm.form)
+			.post('/api/register', wrapper.vm.form)
 			.then(res => {
 				expect(res.status).toBe(200);
 			})

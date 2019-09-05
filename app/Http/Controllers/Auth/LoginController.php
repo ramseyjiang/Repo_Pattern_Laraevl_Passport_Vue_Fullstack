@@ -58,7 +58,11 @@ class LoginController extends Controller
             ]);
         } else {
             return response()->json([
-                'errors' => trans('auth.failed')
+                'errors' => [
+                    'username' => [
+                        trans('auth.failed')
+                    ]
+                ]
             ], Response::HTTP_UNAUTHORIZED);
         }
     }

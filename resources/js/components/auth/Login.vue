@@ -78,10 +78,14 @@
 
 						<div class="form-group row mb-0">
 							<div class="col-md-8 offset-md-4">
-								<button @click="login" class="btn btn-primary">
+								<button
+									@click="login"
+									type="button"
+									class="btn btn-primary"
+								>
 									Login
 								</button>
-								<a class="btn btn-link" href="">
+								<a class="btn btn-link">
 									Forgot Your Password?
 								</a>
 							</div>
@@ -96,6 +100,7 @@
 export default {
 	data() {
 		return {
+			isLogin: false,
 			form: {
 				username: '',
 				password: '',
@@ -112,25 +117,48 @@ export default {
 		};
 	},
 	methods: {
+		clearWarn() {
+			this.invalids.username = false;
+			this.invalids.password = false;
+		},
 		login() {
-			axios
-				.post(baseUrl + '/login', this.form)
-				.then(res => {
-					localStorage.access_token = res.data.access_token;
-					location.href = '/blogs'; //this.$router.push('dashboard');
-				})
-				.catch(err => {
-					if (err.response.data.errors.username) {
-						this.errors.username =
-							err.response.data.errors.username[0];
-						this.invalids.username = true;
-					}
-					if (err.response.data.errors.password) {
-						this.errors.password =
-							err.response.data.errors.password[0];
-						this.invalids.password = true;
-					}
-				});
+			if (this.form.username.length && this.form.password.length) {
+				this.clearWarn();
+				axios
+					.post(baseUrl + '/api/login', this.form)
+					.then(res => {
+						localStorage.setItem(
+							'user',
+							JSON.stringify(res.data.user),
+						);
+						localStorage.setItem(
+							'access_token',
+							res.data.access_token,
+						);
+
+						//Set axios request headers for api axios requests
+						axios.defaults.headers.common['Authorization'] =
+							`Bearer ` + res.data.access_token;
+
+						this.$bus.$emit('login', {
+							isLogin: true,
+						});
+
+						this.$router.push('/blogs');
+					})
+					.catch(err => {
+						if (err.response.data.errors.username) {
+							this.errors.username =
+								err.response.data.errors.username[0];
+							this.invalids.username = true;
+						}
+						if (err.response.data.errors.password) {
+							this.errors.password =
+								err.response.data.errors.password[0];
+							this.invalids.password = true;
+						}
+					});
+			}
 		},
 	},
 };
