@@ -83,7 +83,7 @@ describe('Test Register.vue.', () => {
 			},
 		});
 
-		mock.onPost('/register', wrapper.vm.form).reply(422, {
+		mock.onPost('/api/register', wrapper.vm.form).reply(422, {
 			message: 'The given data was invalid.',
 			errors: {
 				name: ['The name must be at least 2 characters.'],

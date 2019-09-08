@@ -135,7 +135,6 @@
 export default {
 	data() {
 		return {
-			isLogin: false,
 			form: {
 				name: '',
 				username: '',
@@ -188,9 +187,7 @@ export default {
 						axios.defaults.headers.common['Authorization'] =
 							`Bearer ` + res.data.access_token;
 
-						this.$bus.$emit('login', {
-							isLogin: true,
-						});
+						this.$bus.$emit('login');
 						this.$router.push('/blogs');
 					})
 					.catch(err => {

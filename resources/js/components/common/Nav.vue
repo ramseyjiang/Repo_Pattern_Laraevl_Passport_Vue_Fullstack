@@ -62,7 +62,6 @@
 export default {
 	data() {
 		return {
-			isLogin: false,
 			userId: 0,
 			userName: '',
 		};
@@ -72,9 +71,8 @@ export default {
 		this.getUserInfo();
 
 		//The bus is used to trigger the isLoggedIn() after a user login or register.
-		this.$bus.$on('login', ({ isLogin }) => {
+		this.$bus.$on('login', () => {
 			this.getUserInfo();
-			this.isLogin = isLogin;
 		});
 	},
 	computed: {
@@ -96,9 +94,7 @@ export default {
 				this.getUserInfo();
 
 				//It is used to control some buttons not display after logout.
-				this.$bus.$emit('login', {
-					isLogin: false,
-				});
+				this.$bus.$emit('login');
 				this.$router.push('/');
 			});
 		},

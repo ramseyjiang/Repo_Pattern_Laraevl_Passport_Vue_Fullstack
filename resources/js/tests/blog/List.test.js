@@ -3,6 +3,7 @@ import Component from '../../components/blog/List'; // name of your Vue componen
 import BootstrapVue from 'bootstrap-vue';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import '../localStorage'; //It is used to let localStorage works from test.js to vue.
 
 describe('BlogList vue test.', () => {
 	let mock = new MockAdapter(axios);
@@ -84,53 +85,66 @@ describe('BlogList vue test.', () => {
 		expect(wrapper.text()).toMatch(/Filter/);
 	});
 
-	// it('After a admin user login, it will see all buttons', () => {
-	// 	wrapper.setData({
-	// 		userId: 1,
-	// 	});
-	// 	expect(wrapper.find('.btn-primary').text()).toBe('Create a blog');
-	// 	expect(wrapper.text()).toMatch(/Create a blog/);
-	// 	expect(wrapper.find('.btn-success').text()).toBe('View');
-	// 	expect(wrapper.find('.btn-warning').text()).toBe('Edit');
-	// 	expect(wrapper.find('.btn-danger').text()).toBe('Delete');
-	// });
+	it('After a admin user login, it will see all buttons', () => {
+		//It can be used to mock this.$bus.$on in the List.vue
+		// wrapper.vm.$on('login', () => {
+		// 	wrapper.vm.checkUserId();
+		// });
+		// //It is used to trigger this.$bus.$on.
+		// wrapper.vm.$emit('login');
 
-	// it('If a user login, it will not see "create a blog" button', () => {
-	// 	wrapper.setData({
-	// 		userId: 11,
-	// 	});
-	// 	expect(wrapper.find('.btn-success').text()).toBe('View');
-	// 	expect(wrapper.text()).toMatch(/Create a blog/);
-	// 	expect(wrapper.text()).toMatch(/Edit/);
-	// 	expect(wrapper.text()).toMatch(/Delete/);
-	// });
+		wrapper.setData({
+			isTest: true, //It is only used for unittest
+			userId: 1,
+		});
+
+		expect(wrapper.find('.btn-primary').text()).toBe('Create a blog');
+		expect(wrapper.text()).toMatch(/Create a blog/);
+		expect(wrapper.find('.btn-success').text()).toBe('View');
+		expect(wrapper.find('.btn-warning').text()).toBe('Edit');
+		expect(wrapper.find('.btn-danger').text()).toBe('Delete');
+	});
+
+	it('If a user login, it will not see "create a blog" button', () => {
+		wrapper.setData({
+			isTest: true,
+			userId: 11,
+		});
+		expect(wrapper.find('.btn-success').text()).toBe('View');
+		expect(wrapper.text()).toMatch(/Create a blog/);
+		expect(wrapper.text()).toMatch(/Edit/);
+		expect(wrapper.text()).toMatch(/Delete/);
+	});
 
 	it('If a user not login, it will not see "create a blog" button', () => {
 		wrapper.setData({
 			userId: 0,
 		});
+
 		expect(wrapper.find('.btn-success').text()).toBe('View');
 		expect(wrapper.text()).not.toMatch(/Create a blog/);
 		expect(wrapper.text()).not.toMatch(/Edit/);
 		expect(wrapper.text()).not.toMatch(/Delete/);
 	});
 
-	// it('Click create a blog button', () => {
-	// 	wrapper.setData({
-	// 		userId: 1,
-	// 	});
+	it('Click create a blog button', () => {
+		wrapper.setData({
+			isTest: true,
+			userId: 1,
+		});
 
-	// 	wrapper
-	// 		.find('.btn-primary')
-	// 		.find('button')
-	// 		.trigger('click');
+		wrapper
+			.find('.btn-primary')
+			.find('button')
+			.trigger('click');
 
-	// 	expect(createBlog).toHaveBeenCalled();
-	// 	expect(createBlog).toHaveBeenCalledTimes(1);
-	// });
+		expect(createBlog).toHaveBeenCalled();
+		expect(createBlog).toHaveBeenCalledTimes(1);
+	});
 
 	it('Click view button', () => {
 		wrapper.setData({
+			isTest: true,
 			userId: 1,
 		});
 
@@ -143,33 +157,35 @@ describe('BlogList vue test.', () => {
 		expect(viewBlog).toHaveBeenCalledTimes(1);
 	});
 
-	// it('Click edit button', () => {
-	// 	wrapper.setData({
-	// 		userId: 1,
-	// 	});
+	it('Click edit button', () => {
+		wrapper.setData({
+			isTest: true,
+			userId: 1,
+		});
 
-	// 	wrapper
-	// 		.find('.btn-warning')
-	// 		.find('button')
-	// 		.trigger('click');
+		wrapper
+			.find('.btn-warning')
+			.find('button')
+			.trigger('click');
 
-	// 	expect(editBlog).toHaveBeenCalled();
-	// 	expect(editBlog).toHaveBeenCalledTimes(1);
-	// });
+		expect(editBlog).toHaveBeenCalled();
+		expect(editBlog).toHaveBeenCalledTimes(1);
+	});
 
-	// it('Click delete button', () => {
-	// 	wrapper.setData({
-	// 		userId: 1,
-	// 	});
+	it('Click delete button', () => {
+		wrapper.setData({
+			isTest: true,
+			userId: 1,
+		});
 
-	// 	wrapper
-	// 		.find('.btn-danger')
-	// 		.find('button')
-	// 		.trigger('click');
+		wrapper
+			.find('.btn-danger')
+			.find('button')
+			.trigger('click');
 
-	// 	expect(deleteBlog).toHaveBeenCalled();
-	// 	expect(deleteBlog).toHaveBeenCalledTimes(1);
-	// });
+		expect(deleteBlog).toHaveBeenCalled();
+		expect(deleteBlog).toHaveBeenCalledTimes(1);
+	});
 
 	let getBlogs = () => {
 		axios

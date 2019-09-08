@@ -160,6 +160,7 @@
 export default {
 	data() {
 		return {
+			isTest: false,
 			userId: 0,
 			blogs: [],
 			fields: [
@@ -197,7 +198,8 @@ export default {
 	mounted() {
 		this.getBlogs();
 
-		this.$bus.$on('login', ({ isLogin }) => {
+		this.$bus.$on('login', () => {
+			console.log(132);
 			this.checkUserId();
 		});
 	},
@@ -218,7 +220,9 @@ export default {
 	methods: {
 		checkUserId() {
 			let user = JSON.parse(localStorage.getItem('user'));
-			this.userId = user !== null ? user.id : 0;
+			this.userId = this.isTest
+				? this.userId
+				: (user !== null ? user.id : 0);
 		},
 		getBlogs() {
 			axios

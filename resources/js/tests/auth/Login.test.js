@@ -68,7 +68,7 @@ describe('Test Login.vue.', () => {
 			},
 		});
 
-		mock.onPost('/login', wrapper.vm.form).reply(422, {
+		mock.onPost('/api/login', wrapper.vm.form).reply(422, {
 			message: 'The given data was invalid.',
 			errors: {
 				username: ['The username must be at least 2 characters.'],
