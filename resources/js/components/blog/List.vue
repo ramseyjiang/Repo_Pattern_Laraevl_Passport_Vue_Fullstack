@@ -222,7 +222,9 @@ export default {
 			let user = JSON.parse(localStorage.getItem('user'));
 			this.userId = this.isTest
 				? this.userId
-				: (user !== null ? user.id : 0);
+				: user !== null
+				? user.id
+				: 0;
 		},
 		getBlogs() {
 			axios
