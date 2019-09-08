@@ -199,7 +199,6 @@ export default {
 		this.getBlogs();
 
 		this.$bus.$on('login', () => {
-			console.log(132);
 			this.checkUserId();
 		});
 	},
