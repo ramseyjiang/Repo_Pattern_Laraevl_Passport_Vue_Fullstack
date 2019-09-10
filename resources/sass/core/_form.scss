@@ -1,0 +1,70 @@
+.has-float-label {
+    display:block;
+}
+
+.has-float-label label, .has-float-label>span {
+    position:absolute;
+    cursor:text;
+    font-size:75%;
+    opacity:1;
+    -webkit-transition:all .2s;
+    transition:all .2s;
+    top:-1.2em;
+    left:1.5rem;
+    z-index:3;
+    line-height:1;
+    padding:0 1px;
+    color: #2E4057;
+}
+.has-float-label label::after, .has-float-label>span::after {
+    content:" ";
+    display:block;
+    position:absolute;
+    background:#fff;
+    height:2px;
+    top:50%;
+    left:-.2em;
+    right:-.2em;
+    z-index:-1
+}
+
+//Show the placeholder when the input is focused.
+.has-float-label .form-control::-webkit-input-placeholder {
+    opacity:1;
+    -webkit-transition:all .2s;
+    transition:all .2s
+}
+.has-float-label .form-control::-moz-placeholder {
+    opacity:1;
+    transition:all .2s
+}
+.has-float-label .form-control:-ms-input-placeholder {
+    opacity:1;
+    transition:all .2s
+}
+.has-float-label .form-control::placeholder {
+    opacity:1;
+    -webkit-transition:all .2s;
+    transition:all .2s
+}
+
+//By default, the placeholder should be transparent. Also, it should inherit the transition.
+.has-float-label .form-control:placeholder-shown:not(:focus)::-webkit-input-placeholder {
+    opacity:0
+}
+.has-float-label .form-control:placeholder-shown:not(:focus)::-moz-placeholder {
+    opacity:0
+}
+.has-float-label .form-control:placeholder-shown:not(:focus):-ms-input-placeholder {
+    opacity:0
+}
+.has-float-label .form-control:placeholder-shown:not(:focus)::placeholder {
+    opacity:0
+}
+
+//When the element is focused, remove the label transform. Also, do this when the placeholder is _not_ shown, 
+.has-float-label .form-control:placeholder-shown:not(:focus)+* {
+    font-size:110%;
+    color: #2E4057;
+    top:.5em;
+}

@@ -1,6 +1,6 @@
 <template>
 	<div class="row justify-content-center">
-		<div class="col-md-8">
+		<div class="col-md-7">
 			<div class="card">
 				<div class="card-header">
 					Login
@@ -8,57 +8,52 @@
 
 				<div class="card-body">
 					<form @submit.prevent="login">
-						<div class="form-group row">
-							<label
-								for="username"
-								class="col-sm-4 col-form-label text-md-right"
-							>
-								Username
-							</label>
-
-							<div class="col-md-6">
-								<input
-									type="text"
-									class="form-control"
-									:class="{ 'is-invalid': invalids.username }"
-									name="username"
-									placeholder="Please input username or email"
-									v-model="form.username"
-									required
-									autofocus
-								/>
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ errors.username }}</strong>
-								</span>
+						<div class="form-group row justify-content-center">
+							<div class="col-md-9">
+								<label class="has-float-label">
+									<input
+										type="text"
+										class="form-control"
+										:class="{
+											'is-invalid': invalids.username,
+										}"
+										name="username"
+										placeholder="Please input username or email"
+										v-model="form.username"
+										required
+									/>
+									<span for="username">Username/Email</span>
+									<div class="invalid-feedback" role="alert">
+										<strong>{{ errors.username }}</strong>
+									</div>
+								</label>
 							</div>
 						</div>
 
-						<div class="form-group row">
-							<label
-								for="password"
-								class="col-md-4 col-form-label text-md-right"
-							>
-								Password
-							</label>
-
-							<div class="col-md-6">
-								<input
-									type="password"
-									class="form-control"
-									:class="{ 'is-invalid': invalids.password }"
-									name="password"
-									placeholder="Please input password"
-									v-model="form.password"
-									required
-								/>
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ errors.password }}</strong>
-								</span>
+						<div class="form-group row justify-content-center">
+							<div class="col-md-9">
+								<label class="has-float-label">
+									<input
+										type="password"
+										class="form-control"
+										:class="{
+											'is-invalid': invalids.password,
+										}"
+										name="password"
+										placeholder="Please input password"
+										v-model="form.password"
+										required
+									/>
+									<span for="password">Password</span>
+									<div class="invalid-feedback" role="alert">
+										<strong>{{ errors.password }}</strong>
+									</div>
+								</label>
 							</div>
 						</div>
 
-						<div class="form-group row">
-							<div class="col-md-6 offset-md-4">
+						<div class="form-group row justify-content-center">
+							<div class="col-md-8 offset-md-3">
 								<div class="form-check">
 									<input
 										class="form-check-input"
@@ -76,8 +71,8 @@
 							</div>
 						</div>
 
-						<div class="form-group row mb-0">
-							<div class="col-md-8 offset-md-4">
+						<div class="form-group row mb-0 justify-content-center">
+							<div class="col-md-8 offset-md-3">
 								<button
 									@click="login"
 									type="button"
