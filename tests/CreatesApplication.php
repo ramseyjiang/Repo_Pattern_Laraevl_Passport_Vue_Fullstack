@@ -36,7 +36,7 @@ trait CreatesApplication
     public function loginAsUser($user = null)
     {
         $user = User::first();
-        $this->actingAs($user);
+        $this->actingAs($user, 'api');
         return $user;
     }
 

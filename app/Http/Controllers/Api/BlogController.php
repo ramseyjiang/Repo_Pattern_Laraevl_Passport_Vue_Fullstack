@@ -1,10 +1,11 @@
 <?php
 
-namespace Rspafs\Http\Controllers;
+namespace Rspafs\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Rspafs\Http\Requests\BlogRequest;
 use Rspafs\Contracts\Repositories\BlogRepositoryContract;
+use Rspafs\Http\Controllers\Controller;
 use Auth;
 
 class BlogController extends Controller
@@ -19,7 +20,6 @@ class BlogController extends Controller
      */
     public function __construct(BlogRepositoryContract $blogRepo)
     {
-        $this->middleware(['auth'])->except('index', 'show', 'create', 'edit');
         $this->blogRepo = $blogRepo;
     }
 
@@ -89,26 +89,5 @@ class BlogController extends Controller
     public function show(string $blogId)
     {
         return response()->json($this->blogRepo->getOne($blogId));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 }
