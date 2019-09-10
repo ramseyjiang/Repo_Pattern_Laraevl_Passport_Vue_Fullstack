@@ -15,8 +15,8 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('login', 'Api\UserController@login');
 
     Route::group([ 'prefix' => 'blogs' ], function () {
-        Route::get('/index', 'BlogController@index')->name('blogs.index');
-        Route::get('/show/{blogId}', 'BlogController@show')->name('blogs.show');
+        Route::get('/index', 'Api\BlogController@index')->name('blogs.index');
+        Route::get('/show/{blogId}', 'Api\BlogController@show')->name('blogs.show');
     });
 });
 
@@ -26,9 +26,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('logout', 'Api\UserController@logout');
 
     Route::group([ 'prefix' => 'blogs' ], function () {
-        Route::post('/store', 'BlogController@store')->name('blogs.store');
-        Route::put('/update/{blogId}', 'BlogController@update')->name('blogs.update');
-        Route::delete('/delete/{blogId}', 'BlogController@destroy')->name('blogs.destroy');
+        Route::post('/store', 'Api\BlogController@store')->name('blogs.store');
+        Route::put('/update/{blogId}', 'Api\BlogController@update')->name('blogs.update');
+        Route::delete('/delete/{blogId}', 'Api\BlogController@destroy')->name('blogs.destroy');
     });
 });
 

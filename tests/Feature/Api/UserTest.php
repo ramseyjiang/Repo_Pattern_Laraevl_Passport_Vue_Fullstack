@@ -102,7 +102,7 @@ class UserTest extends TestCase
 
         // Test unauthenticated access.
         $this->get($url)
-        ->assertStatus(Response::HTTP_FOUND);
+        ->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
 
         // Test authenticated access.
         $this->get($url, $this->headers())

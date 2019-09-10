@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api;
 
 use Tests\TestCase;
 use Illuminate\Http\Response;
@@ -29,7 +29,7 @@ class BlogTest extends TestCase
     public function testBlogShow()
     {
         $blogId = Blog::first()->_id;
-        $this->call('get', '/blogs/show/' . $blogId)
+        $this->call('get', '/api/blogs/show/' . $blogId)
              ->assertStatus(Response::HTTP_OK)
              ->assertJsonStructure([ 'name', 'desc', 'is_released', 'user_id', 'created_at', 'updated_at']);
     }
@@ -78,7 +78,7 @@ class BlogTest extends TestCase
             'is_released' => self::IS_RELEASED
         ]);
 
-        $this->call('PUT', '/blogs/update/' . $blog->_id , [
+        $this->call('PUT', '/api/blogs/update/' . $blog->_id , [
             'name' => self::UPDATE_BLOG,
             'desc' => self::BLOG_CONTENT
         ])  ->assertStatus(Response::HTTP_OK)
@@ -106,7 +106,7 @@ class BlogTest extends TestCase
             'is_released' => self::IS_RELEASED
         ]);
 
-        $this->putJson('/blogs/update/' . $blog->_id, [
+        $this->putJson('/api/blogs/update/' . $blog->_id, [
             'desc' => '',
             'name' => ''
         ])  ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -124,7 +124,7 @@ class BlogTest extends TestCase
             'is_released' => self::IS_RELEASED
         ]);
 
-        $this->delete('/blogs/delete/' . $blog->_id)
+        $this->delete('/api/blogs/delete/' . $blog->_id)
              ->assertStatus(Response::HTTP_OK);
 
         $this->assertDatabaseHas('logs', [
