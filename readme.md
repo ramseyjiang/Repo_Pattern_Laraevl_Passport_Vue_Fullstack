@@ -1,4 +1,4 @@
-<p>All the underbelow, it bases on you have learnt https://github.com/ramseyjiang/Repo_Pattern_Laraevl_Passport_Vue_Fullstack/tree/2_add_passport_for_api before.</p>
+<p>All the underbelow, it bases on you have learnt https://github.com/ramseyjiang/Repo_Pattern_Laraevl_Passport_Vue_Fullstack/tree/3_passport_vue_fullstack before.</p>
 
 <p>If want to learn how to do this project step by step, please follow all the under below. </p>
 
