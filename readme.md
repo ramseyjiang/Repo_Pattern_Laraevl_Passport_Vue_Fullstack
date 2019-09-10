@@ -27,11 +27,11 @@
 <p>Step11: php artisan make:policy BlogPolicy</p>
 <p>Update app/Providers/AuthServiceProvider.php</p>
 
-<p>Step12: php artisan make:controller BlogController --resource</p>
-<p>Update routes/web.php</p>
+<p>Step12: php artisan make:controller Api/BlogController --resource</p>
+<p>Update routes/web.php and routes/api.php</p>
 
-<p>Step13: php artisan make:test BlogTest </p>
-<p>Update tests/Feature/BlogTest.php</p>
+<p>Step13: php artisan make:test Api\BlogTest </p>
+<p>Update tests/Feature/Api/BlogTest.php</p>
 
 <p>Step14: If run "./vendor/bin/phpunit" no issues, it works fine.</p>
 
