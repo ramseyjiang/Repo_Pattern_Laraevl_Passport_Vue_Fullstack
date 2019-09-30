@@ -30,6 +30,15 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('/update/{blogId}', 'Api\BlogController@update')->name('blogs.update');
         Route::delete('/delete/{blogId}', 'Api\BlogController@destroy')->name('blogs.destroy');
     });
+
+    Route::group([ 'prefix' => 'tasks' ], function () {
+        Route::post('/index', 'Api\TaskController@index')->name('tasks.index');
+        Route::post('/store', 'Api\TaskController@store')->name('tasks.store');
+        Route::put('/update/{taskId}', 'Api\TaskController@update')->name('tasks.update');
+        Route::delete('/delete/{taskId}', 'Api\TaskController@destroy')->name('tasks.destroy');
+        Route::put('/mark/{taskId}/done', 'Api\TaskController@markTaskDone')->name('tasks.markDone');
+        Route::put('/mark/{taskId}/undone', 'Api\TaskController@markTaskUndone')->name('tasks.markUndone');
+    });
 });
 
 

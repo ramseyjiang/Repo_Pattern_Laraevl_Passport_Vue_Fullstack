@@ -15,6 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'Rspafs\Models\Blog' => 'Rspafs\Policies\BlogPolicy',
+        'Rspafs\Models\Task' => 'Rspafs\Policies\TaskPolicy',
     ];
 
     /**

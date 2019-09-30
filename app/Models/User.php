@@ -67,4 +67,14 @@ class User extends Authenticatable
         ->orderBy('released_at')
         ->orderByDesc('created_at');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)
+            ->orderBy('finished_at')
+            ->orderByDesc('updated_at');
+    }
 }
