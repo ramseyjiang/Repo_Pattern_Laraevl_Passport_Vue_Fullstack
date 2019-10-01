@@ -52,27 +52,51 @@ interface TaskRepositoryContract
      * @param object $task
      * @return void
      */
-    public function restoreTask(object $task);
+    public function restoreTask(int $taskId);
 
     /**
-     * It is used to show current user's all active tasks not include deleted tasks.
+     * Show all users active tasks not include soft deleted tasks.
      *
      * @param object $user
      * @return void
      */
-    public function getUserActiveTasks(object $user);
+    public function getUsersActiveTasks();
 
     /**
-     * It is used to show current user's all tasks include deleted tasks.
+     * Get a user active tasks by userId
      *
-     * @param object $user
+     * @param integer $userId
      * @return void
      */
-    public function getUserAllTasks(object $user);
+    public function getUserActiveTasks(int $userId);
+    
+    /**
+     * Show all users finished tasks.
+     *
+     * @return void
+     */
+    public function getUsersFinishedTasks();
 
     /**
-     * It is used to all user tasks, onlt the admin can invoke this method.
+     * Get a user finished tasks by userId
+     *
+     * @param integer $userId
      * @return void
      */
-    public function getAllUserTasks();
+    public function getUserFinishedTasks(int $userId);
+
+    /**
+     * Show all users trashed tasks..
+     *
+     * @return void
+     */
+    public function getUsersTrashedTasks();
+
+    /**
+     * Get a user trashed tasks by userId
+     *
+     * @param integer $userId
+     * @return void
+     */
+    public function getUserTrashedTasks(int $userId);
 }

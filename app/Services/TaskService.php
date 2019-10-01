@@ -4,7 +4,6 @@ namespace Rspafs\Services;
 
 use Rspafs\Contracts\Services\TaskServiceContract;
 use Rspafs\Contracts\Repositories\TaskRepositoryContract;
-use Carbon\Carbon;
 
 class TaskService implements TaskServiceContract
 {
@@ -81,44 +80,54 @@ class TaskService implements TaskServiceContract
     /**
      * restore a soft deleted task.
      *
-     * @param object $task
+     * @param integer $taskId
      * @return void
      */
-    public function restoreTask(object $task)
+    public function restoreTask(int $taskId)
     {
-        $this->taskRepo->restoreTask($task);
+        $this->taskRepo->restoreTask($taskId);
     }
 
     /**
-     * It is used to show current user's all active tasks not include deleted tasks.
+     * It is used to show current user's all active tasks not include deleted tasks and finished tasks.
+     * If a user is an admin, it will return all users active tasks.
+     * If not, it should return current user active tasks.
      *
      * @param object $user
      * @return void
      */
-    public function getUserActiveTasks(object $user)
+    public function getActiveTasks(object $user)
     {
-        return $this->taskRepo->getUserActiveTasks($user);
+        if($user->id == 1) {
+            return $this->taskRepo->getUsersActiveTasks();
+        } else {
+            return $this->taskRepo->getUserActiveTasks($user->id);
+        }
+    }
+
+    public function getFinishedTasks(object $user)
+    {
+        if($user->id == 1) {
+            return $this->taskRepo->getUsersFinishedTasks();
+        } else {
+            return $this->taskRepo->getUserFinishedTasks($user->id);
+        }
     }
 
     /**
-     * It is used to show current user's all tasks include deleted tasks.
-     *
+     * It is used to get trashed tasks.
+     * If a user is an admin, it will return all users trashed tasks.
+     * If not, it should return current user trashed tasks.
+     * 
      * @param object $user
      * @return void
      */
-    public function getUserAllTasks(object $user)
+    public function getTrashedTasks(object $user)
     {
-        return $this->taskRepo->getUserAllTasks($user);
-    }
-
-    /**
-     * It is used to all user tasks, onlt the admin can invoke this method.
-     *
-     * @param object $user
-     * @return void
-     */
-    public function getAllUserTasks()
-    {
-        return $this->taskRepo->getAllUserTasks();
+        if($user->id == 1) {
+            return $this->taskRepo->getUsersTrashedTasks();
+        } else {
+            return $this->taskRepo->getUserTrashedTasks($user->id);
+        }
     }
 }

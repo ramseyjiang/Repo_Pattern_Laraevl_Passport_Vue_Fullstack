@@ -73,45 +73,93 @@ class TaskRepository implements TaskRepositoryContract
 
     /**
      * restore a soft deleted task.
+     * 
+     * The wrong example, using the following way it won't trigger observer restored or restoring method.
+     * Task::onlyTrashed()
+     * ->where('id', $taskId)
+     * ->restore();
      *
      * @param object $task
      * @return void
      */
-    public function restoreTask(object $task)
+    public function restoreTask(int $taskId)
     {
-        $task->restore();
+        Task::onlyTrashed()
+        ->find($taskId)
+        ->restore();
     }
 
     /**
-     * It is used to show current user's all active tasks not include deleted tasks.
+     * Show all users active tasks not include soft deleted tasks and finished tasks.
      *
      * @param object $user
      * @return void
      */
-    public function getUserActiveTasks(object $user)
+    public function getUsersActiveTasks()
     {
-        return $user->tasks;
+        return Task::where('deleted_at', null)
+        ->where('finished_at', null)
+        ->get();
     }
 
     /**
-     * It is used to show current user's all tasks include deleted tasks.
+     * Get a user active tasks by userId
+     *
+     * @param integer $userId
+     * @return void
+     */
+    public function getUserActiveTasks(int $userId)
+    {
+        return Task::where('user_id', $userId)
+        ->where('deleted_at', null)
+        ->where('finished_at', null)
+        ->get();
+    }
+
+    /**
+     * Show all users finished taskss.
      *
      * @param object $user
      * @return void
      */
-    public function getUserAllTasks(object $user)
+    public function getUsersFinishedTasks()
     {
-        return $user->withTrashed();
+        return Task::where('finished_at', '<>', null)->get();
     }
 
     /**
-     * It is used to all user tasks, onlt the admin can invoke this method.
+     * Get a user finished tasks by userId
      *
-     * @param object $user
+     * @param integer $userId
      * @return void
      */
-    public function getAllUserTasks()
+    public function getUserFinishedTasks(int $userId)
     {
-        return Task::withTrashed();
+        return Task::where('user_id', $userId)
+        ->where('finished_at', '<>', null)
+        ->get();
+    }
+
+    /**
+     * Show current user's all tasks include deleted tasks.
+     *
+     * @return void
+     */
+    public function getUsersTrashedTasks()
+    {
+        return Task::onlyTrashed()->get();
+    }
+
+    /**
+     * Get a user trashed tasks by userId
+     *
+     * @param integer $userId
+     * @return void
+     */
+    public function getUserTrashedTasks(int $userId)
+    {
+        return Task::where('user_id', $userId)
+        ->onlyTrashed()
+        ->get();
     }
 }

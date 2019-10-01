@@ -12,18 +12,6 @@ class TaskTest extends TestCase
 {
     const CREATE_TASK = 'create tasks';
     const UPDATE_TASK = 'update tasks';
-    
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    // public function testTaskIndex()
-    // {
-    //     $this->loginAsUser();
-    //     $this->call('get', route('tasks.index'))
-    //          ->assertStatus(Response::HTTP_OK);
-    // }
 
     /**
      * Test create task.
@@ -108,6 +96,30 @@ class TaskTest extends TestCase
         ]);
     }
 
+    public function testShowActiveTasks()
+    {
+        $user = $this->loginAsUser();
+
+        $this->call('POST', route('tasks.showActiveTasks'))
+          ->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testShowFinishedTasks()
+    {
+        $user = $this->loginAsUser();
+
+        $this->call('POST', route('tasks.showFinishedTasks'))
+          ->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testShowTrashedTasks()
+    {
+        $user = $this->loginAsUser();
+
+        $this->call('POST', route('tasks.showTrashedTasks'))
+          ->assertStatus(Response::HTTP_OK);
+    }
+
     public function testDeleteTask()
     {
         $user = $this->loginAsUser();
@@ -132,6 +144,42 @@ class TaskTest extends TestCase
         $this->assertDatabaseHas('logs', [
             'user_id'  => $user->id,
             'desc' => 'Task ' . $task->id . ' is soft deleted by user ' . $user->id,
+        ]);
+    }
+
+    public function testRestoreTask()
+    {
+        $user = $this->loginAsUser();
+        $task = $user->tasks()->create([
+            'name' => self::CREATE_TASK,
+        ]);
+
+        $this->delete('/api/tasks/delete/' . $task->id)
+             ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('tasks', [
+            'id'  => $task->id,
+            'name'     => self::CREATE_TASK,
+            'deleted_at' => Carbon::now()
+        ]);
+
+        $this->assertDatabaseHas('logs', [
+            'user_id'  => $user->id,
+            'desc' => 'Task ' . $task->id . ' is soft deleted by user ' . $user->id,
+        ]);
+
+        $this->post('/api/tasks/restore/' . $task->id)
+             ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('tasks', [
+                'id'  => $task->id,
+                'name'     => self::CREATE_TASK,
+                'deleted_at' => null
+            ]);
+        
+        $this->assertDatabaseHas('logs', [
+            'user_id'  => $user->id,
+            'desc' => 'Task ' . $task->id . ' is restored by user ' . $user->id,
         ]);
     }
 

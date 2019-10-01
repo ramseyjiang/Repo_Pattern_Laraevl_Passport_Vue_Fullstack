@@ -53,7 +53,7 @@ class TaskController extends Controller
      * @param  int  $taskId
      * @return \Illuminate\Http\Response
      */
-    public function update(TaskRequest $request, $taskId)
+    public function update(TaskRequest $request, int $taskId)
     {
         $user = Auth::user();
         $task = $user->tasks()->find($taskId);
@@ -65,14 +65,36 @@ class TaskController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show all active tasks not include deleted tasks and finished tasks
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function show($id)
+    public function showActiveTasks()
     {
-        //
+        $user = Auth::user();
+        return response()->json( $this->taskService->getActiveTasks($user) );
+    }
+
+    /**
+     * Show all finished tasks
+     *
+     * @return void
+     */
+    public function showFinishedTasks()
+    {
+        $user = Auth::user();
+        return response()->json( $this->taskService->getFinishedTasks($user) );
+    }
+
+    /**
+     * Show all trashed tasks.
+     *
+     * @return void
+     */
+    public function showTrashedTasks()
+    {
+        $user = Auth::user();
+        return response()->json( $this->taskService->getTrashedTasks($user) );
     }
 
     /**
@@ -81,13 +103,21 @@ class TaskController extends Controller
      * @param  int  $taskId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($taskId)
+    public function delete(int $taskId)
     {
         $user = Auth::user();
         $task = $user->tasks()->find($taskId);
 
         $this->authorize('match', $task);  // check if the authenticated user can match the task. The second param must be an object.
-        $task->delete();
+        $this->taskService->deleteTask($task);
+
+        return response()->json($user->tasks);
+    }
+
+    public function restore(int $taskId)
+    {
+        $user = Auth::user();
+        $this->taskService->restoreTask($taskId);
 
         return response()->json($user->tasks);
     }
@@ -117,7 +147,7 @@ class TaskController extends Controller
         $user = Auth::user();
         $task = $user->tasks()->find($taskId);
         $this->taskService->markTaskUndone($task);
-        
+
         return response()->json($user->tasks);
     }
 

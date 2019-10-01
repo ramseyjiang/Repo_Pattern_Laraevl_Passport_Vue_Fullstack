@@ -49,30 +49,32 @@ interface TaskServiceContract
     /**
      * Restore a soft deleted task.
      *
-     * @param object $task
+     * @param integer $taskId
      * @return void
      */
-    public function restoreTask(object $task);
+    public function restoreTask(int $taskId);
 
     /**
-     * It is used to show current user's all active tasks not include deleted tasks.
+     * It is used to show all active tasks not include soft deleted tasks and finished tasks.
      *
      * @param object $user
      * @return void
      */
-    public function getUserActiveTasks(object $user);
+    public function getActiveTasks(object $user);
 
     /**
-     * It is used to show current user's all tasks include deleted tasks.
+     * It is used to show all finished tasks.
      *
      * @param object $user
      * @return void
      */
-    public function getUserAllTasks(object $user);
+    public function getFinishedTasks(object $user);
 
     /**
-     * It is used to all user tasks, onlt the admin can invoke this method.
+     * It is used to show all trashed tasks(It means all soft delete tasks.)
+     *
+     * @param object $user
      * @return void
      */
-    public function getAllUserTasks();
+    public function getTrashedTasks(object $user);
 }

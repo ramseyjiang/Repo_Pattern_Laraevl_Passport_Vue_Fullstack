@@ -32,10 +32,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::group([ 'prefix' => 'tasks' ], function () {
-        Route::post('/index', 'Api\TaskController@index')->name('tasks.index');
         Route::post('/store', 'Api\TaskController@store')->name('tasks.store');
         Route::put('/update/{taskId}', 'Api\TaskController@update')->name('tasks.update');
-        Route::delete('/delete/{taskId}', 'Api\TaskController@destroy')->name('tasks.destroy');
+        Route::post('/showActiveTasks', 'Api\TaskController@showActiveTasks')->name('tasks.showActiveTasks');
+        Route::post('/showFinishedTasks', 'Api\TaskController@showFinishedTasks')->name('tasks.showFinishedTasks');
+        Route::post('/showTrashedTasks', 'Api\TaskController@showTrashedTasks')->name('tasks.showTrashedTasks');
+        Route::delete('/delete/{taskId}', 'Api\TaskController@delete')->name('tasks.delete');
+        Route::post('/restore/{taskId}', 'Api\TaskController@restore')->name('tasks.restore');
         Route::put('/mark/{taskId}/done', 'Api\TaskController@markTaskDone')->name('tasks.markDone');
         Route::put('/mark/{taskId}/undone', 'Api\TaskController@markTaskUndone')->name('tasks.markUndone');
     });

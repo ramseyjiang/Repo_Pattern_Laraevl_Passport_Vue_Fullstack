@@ -65,7 +65,8 @@ class TaskObserver
      */
     public function restored(Task $task)
     {
-        //
+        $desc = 'task ' . $task->id . ' is restored by user '. $this->user->id;
+        $this->logRepo->taskOperateLog($this->user, $desc);
     }
     /**
      * Handle the task "force deleted" event.
